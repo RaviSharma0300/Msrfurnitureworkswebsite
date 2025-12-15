@@ -1,4 +1,4 @@
-import { Search, ShoppingCart, Filter, SlidersHorizontal, X } from 'lucide-react';
+import { Search, ShoppingCart, Filter, SlidersHorizontal, X, ArrowLeft } from 'lucide-react';
 import { Product } from '../App';
 import { products, categories } from './mockData';
 import { useState, useEffect } from 'react';
@@ -10,6 +10,7 @@ type ProductsProps = {
   onViewCart: () => void;
   cartCount: number;
   initialCategory?: string;
+  onBack: () => void;
 };
 
 const containerVariants = {
@@ -41,7 +42,7 @@ const itemVariants = {
   }
 };
 
-export function Products({ onViewProduct, onViewCart, cartCount, initialCategory }: ProductsProps) {
+export function Products({ onViewProduct, onViewCart, cartCount, initialCategory, onBack }: ProductsProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFilters, setSelectedFilters] = useState({
     categories: [] as string[],
@@ -127,82 +128,83 @@ export function Products({ onViewProduct, onViewCart, cartCount, initialCategory
         animate={{ y: 0, opacity: 1 }}
         className="bg-white border-b border-[#8B7355]/15 sticky top-0 z-40"
       >
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 py-4">
-          <h1 className="text-[#2C2C2C] text-2xl">Browse Products</h1>
+        <div className="max-w-7xl mx-auto px-4 lg:px-8 py-3 md:py-4 flex items-center gap-2 md:gap-3">
+          <motion.button 
+            onClick={onBack} 
+            whileHover={{ scale: 1.05, x: -3 }}
+            whileTap={{ scale: 0.95 }}
+            className="lg:hidden flex items-center gap-2 px-3 md:px-4 py-2 bg-[#964B00] text-white rounded-lg md:rounded-xl hover:bg-[#7a3d00] transition-colors shadow-sm"
+          >
+            <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
+            <span className="text-sm md:text-base font-medium">Back</span>
+          </motion.button>
+          <h1 className="text-[#2C2C2C] text-base md:text-lg lg:text-xl">Browse Products</h1>
         </div>
       </motion.div>
 
       <div className="max-w-7xl mx-auto px-4 lg:px-8 py-8">
-        <div className="flex gap-8">
-          {/* Sidebar Filter */}
-          <div className="hidden lg:block">
-            <SidebarFilter
-              selectedFilters={selectedFilters}
-              onFilterChange={setSelectedFilters}
-              isOpen={true}
-              onClose={() => {}}
-            />
-          </div>
-
-          {/* Mobile Filter Button */}
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setIsSidebarOpen(true)}
-            className="lg:hidden fixed bottom-6 right-6 z-30 bg-[#8B7355] text-white p-4 rounded-full shadow-lg"
-          >
-            <SlidersHorizontal className="w-6 h-6" />
-          </motion.button>
-
-          {/* Mobile Sidebar */}
-          <div className="lg:hidden">
-            <SidebarFilter
-              selectedFilters={selectedFilters}
-              onFilterChange={setSelectedFilters}
-              isOpen={isSidebarOpen}
-              onClose={() => setIsSidebarOpen(false)}
-            />
-          </div>
+        {/* Desktop & Mobile Layout */}
+        <div className="lg:flex lg:gap-8">
+          {/* Sidebar - Always visible on desktop, slide-in on mobile */}
+          <SidebarFilter
+            selectedFilters={selectedFilters}
+            onFilterChange={setSelectedFilters}
+            isOpen={isSidebarOpen}
+            onClose={() => setIsSidebarOpen(false)}
+          />
 
           {/* Main Content */}
-          <div className="flex-1">
+          <div className="flex-1 lg:w-0">
             {/* Search and Sort */}
             <motion.div
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
-              className="mb-8 space-y-4"
+              className="mb-6 md:mb-8 space-y-3 md:space-y-4"
             >
-              {/* Search Bar */}
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#6B6B6B]" />
-                <input
-                  type="text"
-                  placeholder="Search furniture..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-white border border-[#8B7355]/15 rounded-xl text-[#2C2C2C] placeholder-[#6B6B6B] focus:outline-none focus:ring-2 focus:ring-[#8B7355]"
-                />
-                {searchQuery && (
-                  <motion.button
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    onClick={() => setSearchQuery('')}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-[#E8E3DE] rounded-full"
-                  >
-                    <X className="w-4 h-4 text-[#6B6B6B]" />
-                  </motion.button>
-                )}
+              {/* Search Bar with Filter Button */}
+              <div className="flex gap-2 md:gap-3">
+                {/* Filter Button - Hidden on Desktop, Visible on Mobile/Tablet */}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setIsSidebarOpen(true)}
+                  className="lg:hidden flex-shrink-0 bg-[#964B00] text-white p-3 md:p-3.5 rounded-xl shadow-md hover:bg-[#7a3d00] transition-colors"
+                >
+                  <SlidersHorizontal className="w-5 h-5 md:w-6 md:h-6" />
+                </motion.button>
+
+                {/* Search Bar */}
+                <div className="relative flex-1">
+                  <Search className="absolute left-3 md:left-4 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-[#6B6B6B]" />
+                  <input
+                    type="text"
+                    placeholder="Search furniture..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full pl-10 md:pl-12 pr-4 py-3 bg-white border border-[#8B7355]/15 rounded-xl text-[#2C2C2C] placeholder-[#6B6B6B] focus:outline-none focus:ring-2 focus:ring-[#964B00] text-sm md:text-base"
+                  />
+                  {searchQuery && (
+                    <motion.button
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-3 md:right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-[#E8E3DE] rounded-full"
+                    >
+                      <X className="w-4 h-4 text-[#6B6B6B]" />
+                    </motion.button>
+                  )}
+                </div>
               </div>
 
               {/* Sort and Results Count */}
-              <div className="flex items-center justify-between">
-                <p className="text-[#6B6B6B] text-sm">
+              <div className="flex items-center justify-between gap-2">
+                <p className="text-[#6B6B6B] text-xs md:text-sm">
                   {sortedProducts.length} {sortedProducts.length === 1 ? 'product' : 'products'} found
                 </p>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="px-4 py-2 bg-white border border-[#8B7355]/15 rounded-lg text-[#2C2C2C] text-sm focus:outline-none focus:ring-2 focus:ring-[#8B7355]"
+                  className="px-3 md:px-4 py-2 bg-white border border-[#8B7355]/15 rounded-lg text-[#2C2C2C] text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-[#964B00]"
                 >
                   <option value="featured">Featured</option>
                   <option value="price-low">Price: Low to High</option>

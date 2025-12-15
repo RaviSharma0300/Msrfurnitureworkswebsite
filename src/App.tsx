@@ -92,16 +92,17 @@ export default function App() {
             cartCount={cartCount}
           />
         )}
-        {currentView === 'about' && <About />}
+        {currentView === 'about' && <About onBack={() => setCurrentView('home')} />}
         {currentView === 'products' && (
           <Products
             onViewProduct={viewProduct}
             onViewCart={() => setCurrentView('cart')}
             cartCount={cartCount}
             initialCategory={selectedCategory}
+            onBack={() => setCurrentView('home')}
           />
         )}
-        {currentView === 'contact' && <Contact />}
+        {currentView === 'contact' && <Contact onBack={() => setCurrentView('home')} />}
         {currentView === 'product' && selectedProduct && (
           <ProductDetail
             product={selectedProduct}

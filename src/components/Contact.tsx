@@ -1,8 +1,12 @@
-import { Mail, Phone, MapPin, Send, Clock } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Clock, ArrowLeft } from 'lucide-react';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
-export function Contact() {
+interface ContactProps {
+  onBack?: () => void;
+}
+
+export function Contact({ onBack }: ContactProps) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -18,7 +22,20 @@ export function Contact() {
 
   return (
     <div className="min-h-screen bg-[#FAF8F5] pb-8">
-      <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8 lg:py-12">
+      {/* Back Button - Hidden on Desktop, Visible on Mobile/Tablet */}
+      <div className="lg:hidden max-w-6xl mx-auto px-4 md:px-6 lg:px-8 pt-4 md:pt-6">
+        <motion.button
+          onClick={onBack || (() => window.history.back())}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-2 bg-[#964B00] text-white px-4 py-2.5 rounded-lg hover:bg-[#7a3d00] transition-colors shadow-sm"
+        >
+          <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
+          <span className="text-sm md:text-base font-medium">Back</span>
+        </motion.button>
+      </div>
+
+      <div className="max-w-6xl mx-auto px-4 md:px-6 lg:px-8 pb-6 md:pb-8 lg:pb-12 pt-4 lg:pt-0">
         <motion.h1 
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}

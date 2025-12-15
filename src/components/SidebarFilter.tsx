@@ -18,6 +18,18 @@ type SidebarFilterProps = {
 export function SidebarFilter({ selectedFilters, onFilterChange, isOpen, onClose }: SidebarFilterProps) {
   const [expandedCategories, setExpandedCategories] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>(selectedFilters.priceRange);
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  // Check if we're on desktop
+  useEffect(() => {
+    const checkDesktop = () => {
+      setIsDesktop(window.innerWidth >= 1024);
+    };
+    
+    checkDesktop();
+    window.addEventListener('resize', checkDesktop);
+    return () => window.removeEventListener('resize', checkDesktop);
+  }, []);
 
   // Auto-expand categories that have active filters
   useEffect(() => {
@@ -79,7 +91,7 @@ export function SidebarFilter({ selectedFilters, onFilterChange, isOpen, onClose
 
   return (
     <>
-      {/* Mobile Overlay */}
+      {/* Overlay - Show only on Mobile/Tablet when sidebar is open */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -94,10 +106,12 @@ export function SidebarFilter({ selectedFilters, onFilterChange, isOpen, onClose
 
       {/* Sidebar */}
       <motion.aside
-        initial={{ x: -300 }}
-        animate={{ x: isOpen ? 0 : -300 }}
+        initial={false}
+        animate={{ 
+          x: isOpen || isDesktop ? 0 : -320 
+        }}
         transition={{ type: 'spring', damping: 25 }}
-        className="lg:static lg:translate-x-0 fixed left-0 top-0 h-full w-80 bg-white border-r border-[#8B7355]/15 overflow-y-auto z-50 lg:z-auto"
+        className="fixed lg:sticky lg:top-0 left-0 top-[140px] h-[calc(100vh-140px)] lg:h-[calc(100vh-5rem)] w-80 bg-white border-r border-[#8B7355]/15 overflow-y-auto z-50 lg:z-auto shadow-2xl lg:shadow-none rounded-tr-2xl rounded-br-2xl lg:rounded-none"
       >
         <div className="p-6">
           {/* Header */}

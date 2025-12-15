@@ -1,9 +1,27 @@
 import { motion } from "framer-motion";
+import { ArrowLeft } from "lucide-react";
 
-export function About() {
+interface AboutProps {
+  onBack?: () => void;
+}
+
+export function About({ onBack }: AboutProps) {
   return (
     <div className="min-h-screen bg-[#FAF8F5] pb-8">
-      <div className="max-w-4xl mx-auto px-4 md:px-6 lg:px-8 py-6 md:py-8 lg:py-12">
+      {/* Back Button - Hidden on Desktop, Visible on Mobile/Tablet */}
+      <div className="lg:hidden max-w-4xl mx-auto px-4 md:px-6 lg:px-8 pt-4 md:pt-6">
+        <motion.button
+          onClick={onBack || (() => window.history.back())}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="flex items-center gap-2 bg-[#964B00] text-white px-4 py-2.5 rounded-lg hover:bg-[#7a3d00] transition-colors shadow-sm"
+        >
+          <ArrowLeft className="w-5 h-5 md:w-6 md:h-6" />
+          <span className="text-sm md:text-base font-medium">Back</span>
+        </motion.button>
+      </div>
+
+      <div className="max-w-4xl mx-auto px-4 md:px-6 lg:px-8 pb-6 md:pb-8 lg:pb-12 pt-4 lg:pt-0">
         <motion.h1 
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}

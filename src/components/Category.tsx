@@ -26,21 +26,22 @@ export function Category({ category, onBack, onViewProduct, onViewCart, cartCoun
         animate={{ y: 0, opacity: 1 }}
         className="sticky top-0 bg-white z-10 border-b border-gray-100"
       >
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 py-4 flex items-center justify-between">
-          <div className="flex items-center">
+        <div className="max-w-7xl mx-auto px-4 lg:px-8 py-3 md:py-4 flex items-center justify-between">
+          <div className="flex items-center gap-2 md:gap-3">
             <motion.button 
               onClick={onBack} 
-              whileHover={{ scale: 1.1, x: -5 }}
+              whileHover={{ scale: 1.05, x: -3 }}
               whileTap={{ scale: 0.95 }}
-              className="p-2 -ml-2"
+              className="flex items-center gap-2 px-3 md:px-4 py-2 bg-[#964B00] text-white rounded-lg md:rounded-xl hover:bg-[#7a3d00] transition-colors shadow-sm"
             >
-              <ArrowLeft className="w-6 h-6" />
+              <ArrowLeft className="w-4 h-4 md:w-5 md:h-5" />
+              <span className="text-sm md:text-base font-medium">Back</span>
             </motion.button>
             <motion.h1 
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="ml-4"
+              className="text-[#2C2C2C] text-base md:text-lg lg:text-xl"
             >
               {category}
             </motion.h1>
@@ -51,12 +52,12 @@ export function Category({ category, onBack, onViewProduct, onViewCart, cartCoun
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
           >
-            <ShoppingCart className="w-6 h-6" />
+            <ShoppingCart className="w-5 h-5 md:w-6 md:h-6 text-[#2C2C2C]" />
             {cartCount > 0 && (
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className="absolute -top-2 -right-2 bg-black text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                className="absolute -top-2 -right-2 bg-[#964B00] text-white rounded-full w-4 h-4 md:w-5 md:h-5 flex items-center justify-center text-xs font-medium"
               >
                 {cartCount}
               </motion.div>
